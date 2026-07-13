@@ -132,7 +132,7 @@ class IPTVSettingsFragment(private val plugin: IPTVPlugin) : BottomSheetDialogFr
                     savedLinks.forEach { link ->
                         val linkItemView = getLayout("list_link", inflater, container)
                         linkItemView.findView<TextView>("name").text = link.name 
-                        linkItemView.findView<TextView>("link").text = link.url
+                        linkItemView.findView<TextView>("url").text = link.url
                         val deleteButton = linkItemView.findView<ImageView>("delete_button")
                         deleteButton.setImageDrawable(getDrawable("delete_icon"))
                         deleteButton.setOnClickListener(object : View.OnClickListener {
