@@ -48,6 +48,7 @@ data class Link(
     val username: String,
     val password: String
 )
+@Serializable
 data class Category(
     @JsonProperty("category_name") val categoryName: String,
     @JsonProperty("category_id") val categoryId: String,
