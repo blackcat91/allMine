@@ -92,6 +92,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
 
     @OptIn(InternalSerializationApi::class)
     override suspend fun load(url: String): LoadResponse? {
+        println("This IS THE URL!!!!  ${url}")
         // Fetch current EPG track data matching this stream if available
         val currentEpgText = try {
 
