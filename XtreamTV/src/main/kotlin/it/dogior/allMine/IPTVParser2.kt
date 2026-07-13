@@ -50,7 +50,7 @@ data class Channel(
     @SerialName("stream_type") val streamType: String,
     @SerialName("stream_id") val streamId: Int,
     @SerialName("stream_icon") val streamIcon: String,
-    @SerialName("epg_channel_id") val epgChannelId: String,
+    @SerialName("epg_channel_id") val epgChannelId: String?,
     @SerialName("added") val added: String,
     @SerialName("category_id") val categoryId: String,
     @SerialName("custom_sid") val customSid: String,
