@@ -2,10 +2,9 @@ import java.util.Properties
 
 dependencies {
     implementation("com.google.android.material:material:1.4.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
-    implementation(platform("io.github.jan-tennert.supabase:bom:3.0.1")) // Check for latest version
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.8.0")
     implementation("io.github.jan-tennert.supabase:storage-kt")
     implementation("io.ktor:ktor-client-android:2.3.12") // Use a Ktor engine suitable for your platform
 }
@@ -19,7 +18,7 @@ android {
         buildConfig = true
         viewBinding = true
     }
-    
+
 }
 
 
