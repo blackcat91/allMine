@@ -16,6 +16,18 @@ import kotlin.time.Duration
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.time.Instant
+import io.ktor.client.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.utils.io.jvm.javaio.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.DecodeSequenceMode
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeToSequence
+import okhttp3.OkHttpClient
+import okhttp3.Request
+
 
 fun parseXmltvTimeToEpoch(timeStr: String): Long {
     return try {
@@ -69,6 +81,30 @@ data class EPG(
 
     )
 
+@OptIn(ExperimentalSerializationApi::class)
+fun <T> fetchWithOkHttp(
+    client: OkHttpClient,
+    url: String,
+    action: (Sequence<Category>) -> T
+): T? {
+    val request = Request.Builder().url(url).build()
+
+    return client.newCall(request).execute().use { response ->
+        if (!response.isSuccessful) return null
+
+        val inputStream = response.body?.byteStream() ?: return null
+
+        val itemSequence = Json.decodeToSequence<Category>(
+            stream = inputStream.buffered(),
+            format = DecodeSequenceMode.ARRAY_WRAPPED
+        )
+
+        // The result of action(itemSequence) is evaluated here
+        // and returned out of the .use {} block
+        action(itemSequence)
+    }
+}
+
 var cachedCategories: List<Category>? = null
 
 suspend fun getCategories(jsonCatalogUrl : String): List<Category>? {
@@ -76,6 +112,7 @@ suspend fun getCategories(jsonCatalogUrl : String): List<Category>? {
     cachedCategories?.let { return it }
 
     try {
+
         // Otherwise, fetch and cache it
         val jsonRaw = app.get(jsonCatalogUrl).text
         val parsed = parseJson<List<Category>>(jsonRaw)

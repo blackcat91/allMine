@@ -1,11 +1,18 @@
 package it.dogior.allMine
 
 import com.lagradost.cloudstream3.*
+import com.lagradost.cloudstream3.network.buildDefaultClient
 import com.lagradost.cloudstream3.utils.*
 import com.lagradost.cloudstream3.utils.AppUtils.parseJson
 import com.lagradost.cloudstream3.utils.AppUtils.toJson
 import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import java.util.concurrent.TimeUnit
 
+val clientOk = OkHttpClient.Builder()
+    .connectTimeout(30, TimeUnit.SECONDS)
+    .readTimeout(30, TimeUnit.SECONDS)
+    .build()
 class MyLiveTVProvider : MainAPI() { // All providers must be an instance of MainAPI
     override var mainUrl = "https://kwqbwdmmwwpufkownclf.supabase.co/"
     override var name = "IPTV Provider"
@@ -25,22 +32,24 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse? {
 
-        val categories = getCategories(jsonCatalogUrl)
+
 
         // Map every JSON category entry to a dedicated horizontal shelf row
+          val pages : HomePageResponse? = fetchWithOkHttp(clientOk, jsonCatalogUrl)  { categories ->
 
-        if (categories != null) {
-            return newHomePageResponse(categories.map { group ->
-                val searchResponses = group.channels.map { channel ->
-                    // Use TvType.Live here
-                    newLiveSearchResponse(channel.name, channel.streamUrl, TvType.Live) {
-                        this.posterUrl = channel.streamIcon
+                 newHomePageResponse(categories.toList().map { group ->
+                    val searchResponses = group.channels.map { channel ->
+                        // Use TvType.Live here
+                        newLiveSearchResponse(channel.name, channel.streamUrl, TvType.Live) {
+                            this.posterUrl = channel.streamIcon
+                        }
                     }
-                }
-                HomePageList(group.categoryName, searchResponses)
-            }, hasNext = false)
+                    HomePageList(group.categoryName, searchResponses)
+                }, hasNext = false)
+
         }
-        return TODO("Something Went Wrong!")
+
+    return pages
     }
 
     // This function gets called when you search for something
@@ -125,6 +134,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
             dataUrl = url
         ) {
             this.plot = currentEpgText
+
         }
     }
 }
