@@ -20,6 +20,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
     override val hasMainPage = true
 
     // Memory cache for the parsed categories
+
     private var cachedCategories: List<Category>? = null
 
     private suspend fun getCategories(): List<Category> {

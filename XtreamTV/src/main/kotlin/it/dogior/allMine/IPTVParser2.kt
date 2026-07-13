@@ -17,7 +17,7 @@ import io.github.jan.supabase.storage.Storage
 import io.github.jan.supabase.storage.storage
 import kotlin.time.Duration
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 
 fun parseXmltvTimeToEpoch(timeStr: String): Long {
     return try {
@@ -30,9 +30,10 @@ fun parseXmltvTimeToEpoch(timeStr: String): Long {
     }
 }
 
+val supabaseKey = BuildConfig.SUPABASE_API
 val supabase = createSupabaseClient(
     supabaseUrl = "https://kwqbwdmmwwpufkownclf.supabase.co",
-    supabaseKey = "sb_secret_fYe6ZPhFlQBOhP-RwN8uCQ_CSpmUlco"
+    supabaseKey = supabaseKey
 ) {
     install(Storage)
 }

@@ -1,3 +1,5 @@
+import java.util.Properties
+
 dependencies {
     implementation("com.google.android.material:material:1.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
@@ -16,6 +18,12 @@ android {
     buildFeatures {
         buildConfig = true
         viewBinding = true
+    }
+    defaultConfig {
+        val properties = Properties()
+        properties.load(project.rootProject.file("secrets.properties").inputStream())
+        android.buildFeatures.buildConfig = true
+        buildConfigField("String", "SUPABASE_API", "\"${properties.getProperty("SUPABASE_API")}\"")
     }
 }
 
