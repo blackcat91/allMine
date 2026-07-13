@@ -107,9 +107,9 @@ data class Link(
     val password: String
 )
 data class Category(
-    @JsonProperty("category_name") val category_name: String,
-    @JsonProperty("category_id") val category_id: String,
-    @JsonProperty("parent_id") val parent_id: Int,
+    @JsonProperty("category_name") val categoryName: String,
+    @JsonProperty("category_id") val categoryId: String,
+    @JsonProperty("parent_id") val parentId: Int,
     @JsonProperty("category_channels") val channels: List<Channel>,
 
     )

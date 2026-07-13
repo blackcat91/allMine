@@ -37,7 +37,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
                         this.posterUrl = channel.streamIcon
                     }
                 }
-                HomePageList(group.category_name, searchResponses)
+                HomePageList(group.categoryName, searchResponses)
             }, hasNext = false)
         }
         return TODO("Something Went Wrong!")
