@@ -58,7 +58,7 @@ data class Channel(
     @SerialName("direct_source") val directSource: String,
     @SerialName("tv_archive_duration") val tvArchiveuration: Int,
     @SerialName("stream_url") val streamUrl: String,
-    @SerialName("epg") val epg: List<EPG>?,
+    @SerialName("epg") val epg: List<EPG> = emptyList(),
 
     )
 @InternalSerializationApi @Serializable
