@@ -16,28 +16,28 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class IPTVSettingsFragment(private val plugin: IPTVPlugin) : BottomSheetDialogFragment() {
     private fun <T : View> View.findView(name: String): T {
-        val id = plugin.resources!!.getIdentifier(name, "id", BuildConfig.APPLICATION_ID)
+        val id = plugin.resources!!.getIdentifier(name, "id", BuildConfig.LIBRARY_PACKAGE_NAME)
         return this.findViewById(id)
     }
 
     private fun getLayout(name: String, inflater: LayoutInflater, container: ViewGroup?): View {
-        val id = plugin.resources!!.getIdentifier(name, "layout", BuildConfig.APPLICATION_ID)
+        val id = plugin.resources!!.getIdentifier(name, "layout", BuildConfig.LIBRARY_PACKAGE_NAME)
         val layout = plugin.resources!!.getLayout(id)
         return inflater.inflate(layout, container, false)
     }
 
     private fun getDrawable(name: String): Drawable? {
-        val id = plugin.resources!!.getIdentifier(name, "drawable", BuildConfig.APPLICATION_ID)
+        val id = plugin.resources!!.getIdentifier(name, "drawable", BuildConfig.LIBRARY_PACKAGE_NAME)
         return ResourcesCompat.getDrawable(plugin.resources!!, id, null)
     }
 
     private fun getString(name: String): String? {
-        val id = plugin.resources!!.getIdentifier(name, "string", BuildConfig.APPLICATION_ID)
+        val id = plugin.resources!!.getIdentifier(name, "string", BuildConfig.LIBRARY_PACKAGE_NAME)
         return plugin.resources!!.getString(id)
     }
 
     private fun View.makeTvCompatible() {
-        val outlineId = plugin.resources!!.getIdentifier("outline", "drawable", BuildConfig.APPLICATION_ID)
+        val outlineId = plugin.resources!!.getIdentifier("outline", "drawable", BuildConfig.LIBRARY_PACKAGE_NAME)
         this.background = plugin.resources!!.getDrawable(outlineId, null)
     }
 

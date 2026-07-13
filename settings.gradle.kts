@@ -8,20 +8,9 @@ include(
     "AltaDefinizione",
     "AnimeUnity",
     "AnimeWorld",
-    "Arte",
-    "CalcioStreaming",
-    "CB01",
-    "CorsaroNero",
-    "DaddyLive",
-    "Huhu",
-    "IPTV",
 //    "OnlineSerieTV",
     "Nebula",
     "SimklProvider",
-    "StreamingCommunity",
     "TV",
-    "Torrentio",
-    "XtreamTV",
-    "Vavoo",
-    "YouTube"
+    "XtreamTV"
 )

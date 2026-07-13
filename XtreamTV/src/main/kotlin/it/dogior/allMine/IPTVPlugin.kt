@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.plugins.*
-import com.lagradost.cloudstream3.AcraApplication.Companion.getKey
+import com.lagradost.cloudstream3.CloudStreamApp.Companion.getKey
 
 @CloudstreamPlugin
 class IPTVPlugin : Plugin() {
@@ -31,7 +31,7 @@ class IPTVPlugin : Plugin() {
                 if (pluginData != null) {
                     PluginManager.unloadPlugin(pluginData.filePath)
                 } else {
-                    registerMainAPI(IPTVProvider(link.link, link.name))
+                    registerMainAPI(IPTVProvider(link.url, link.name))
                 }
             }
             MainActivity.afterPluginsLoadedEvent.invoke(true)
