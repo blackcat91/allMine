@@ -1,0 +1,156 @@
+[
+    {
+        "iconUrl": "https://altadefinizionegratis.fun/templates/Dark/img/favicon.ico",
+        "fileHash": "sha256-08b7459e7cbc84aa9c321cafb8e888c2e66208a6a57cb4eb0c8678be71a2e7fe",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/blackcat91/allMine",
+        "fileSize": 24248,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "Documentary"
+        ],
+        "version": 6,
+        "internalName": "AltaDefinizione",
+        "description": "Movies and Tv Series from Altadefinizione",
+        "url": "https://raw.githubusercontent.com/blackcat91/allMine/builds/AltaDefinizione.cs3",
+        "name": "AltaDefinizione"
+    },
+    {
+        "iconUrl": "https://www.animeunity.so/apple-touch-icon.png",
+        "fileHash": "sha256-eee17e36bd874e805e1bf82356e1bcb81f92a5e082368a4933242ef4616c55c7",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/blackcat91/allMine",
+        "fileSize": 39695,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 15,
+        "internalName": "AnimeUnity",
+        "description": "Anime from AnimeUnity",
+        "url": "https://raw.githubusercontent.com/blackcat91/allMine/builds/AnimeUnity.cs3",
+        "name": "AnimeUnity"
+    },
+    {
+        "iconUrl": "https://static.animeworld.ac/assets/images/favicon/android-icon-192x192.png?s",
+        "fileHash": "sha256-677bf05e07d6e904382d8b20adbb25d878f6bfda376ad8a95f540abdfc766c18",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/blackcat91/allMine",
+        "fileSize": 41896,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Gian-Fr",
+            "doGior"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 16,
+        "internalName": "AnimeWorld",
+        "description": "Anime from AnimeWorld. This plugin is a fork of the AnimeWorld plugin in the ItalianProvider repo",
+        "url": "https://raw.githubusercontent.com/blackcat91/allMine/builds/AnimeWorld.cs3",
+        "name": "AnimeWorld"
+    },
+    {
+        "iconUrl": "https://nebula.tv/apple-touch-icon.png",
+        "fileHash": "sha256-167042b8958a2031e6af291b420907e6887f7337f1475ac972cd2336397257ce",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/blackcat91/allMine",
+        "fileSize": 23775,
+        "status": 1,
+        "language": "en",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "Others"
+        ],
+        "version": 1,
+        "internalName": "Nebula",
+        "description": "Plugin to watch the free videos and ONLY THE FREE VIDEOS from nebula.tv",
+        "url": "https://raw.githubusercontent.com/blackcat91/allMine/builds/Nebula.cs3",
+        "name": "Nebula"
+    },
+    {
+        "iconUrl": "https://eu.simkl.in/img_favicon/v2/favicon-192x192.png",
+        "fileHash": "sha256-a610a09eeb6ee90702376432e36cc6d785391488b3c2a9c6cc644d136b4a9907",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/blackcat91/allMine",
+        "fileSize": 9331,
+        "status": 1,
+        "language": "en",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA",
+            "TvSeries",
+            "Movie",
+            "Documentary",
+            "Cartoon"
+        ],
+        "version": 1,
+        "internalName": "SimklProvider",
+        "description": "No Streaming. This is just to open the info page of a show from the simkl library",
+        "url": "https://raw.githubusercontent.com/blackcat91/allMine/builds/SimklProvider.cs3",
+        "name": "SimklProvider"
+    },
+    {
+        "iconUrl": "https://raw.githubusercontent.com/doGior/doGiorsHadEnough/refs/heads/master/TV/television.png",
+        "fileHash": "sha256-6a691f94fc42afb4adb011e97e324826ef8c1873cddba90e122b6978121461c6",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/blackcat91/allMine",
+        "fileSize": 29407,
+        "status": 1,
+        "authors": [
+            "Gian-Fr",
+            "Adippe",
+            "doGior"
+        ],
+        "tvTypes": [
+            "Live"
+        ],
+        "version": 3,
+        "internalName": "TV",
+        "description": "Live streams from the Free TV github repository. Forked from the Free-TV plugin in the ItalianProvider repo",
+        "url": "https://raw.githubusercontent.com/blackcat91/allMine/builds/TV.cs3",
+        "name": "TV"
+    },
+    {
+        "iconUrl": "https://www.shutterstock.com/image-vector/iptv-vector-line-icon-ip-260nw-1841427610.jpg",
+        "fileHash": "sha256-3d8e04e594e1ed1421638601789a4d24e4466ba2edc06f855ec21709386124ba",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/blackcat91/allMine",
+        "fileSize": 61119,
+        "status": 1,
+        "authors": [
+            "blackcat91",
+            "dogior"
+        ],
+        "tvTypes": [
+            "Live"
+        ],
+        "version": 4,
+        "internalName": "XtreamTV",
+        "description": "General IPTV player. Add a list in the settings and you'll see it in the plugins list in the home",
+        "url": "https://raw.githubusercontent.com/blackcat91/allMine/builds/XtreamTV.cs3",
+        "name": "XtreamTV"
+    }
+]

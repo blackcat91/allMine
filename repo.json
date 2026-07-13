@@ -1,0 +1,7 @@
+{
+  "name": "allMine",
+  "description": "It's all MINE!",
+  "manifestVersion": 1,
+  "pluginLists": [
+      "https://raw.githubusercontent.com/blackcat91/allMine/builds/plugins.json"  ]
+}
