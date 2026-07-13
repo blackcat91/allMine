@@ -15,6 +15,12 @@ import kotlinx.serialization.json.decodeToSequence
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
+val jsonEngine = Json {
+    ignoreUnknownKeys = true
+    coerceInputValues = true // <--- This must be active for the default values fix to work on nulls
+    isLenient = true
+}
+
 
 fun parseXmltvTimeToEpoch(timeStr: String): Long {
     return try {
@@ -83,7 +89,7 @@ fun <T> fetchWithOkHttp(
 
         val inputStream = response.body?.byteStream() ?: return null
 
-        val itemSequence = Json.decodeToSequence<Category>(
+        val itemSequence = jsonEngine.decodeToSequence<Category>(
             stream = inputStream.buffered(),
             format = DecodeSequenceMode.ARRAY_WRAPPED
         )
