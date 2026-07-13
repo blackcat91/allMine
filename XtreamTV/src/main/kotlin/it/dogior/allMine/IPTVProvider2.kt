@@ -95,64 +95,66 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
         // Fetch current EPG track data matching this stream if available
         val currentEpgText = try {
 
-            if(cachedCategories == null) {
-                cachedCategories =  fetchWithOkHttp(clientOk, jsonCatalogUrl) { it }
-            }
-            // Find the active channel inside our catalog to grab its epgId
-            val flatChannels = cachedCategories?.flatMap { it.channels }
-            val matchingChannel = flatChannels?.find { it.streamUrl == url }
-            val epgMatch = matchingChannel?.epg
+          fetchWithOkHttp(clientOk, jsonCatalogUrl) {
 
-            if (epgMatch != null) {
-                // Get current system time in absolute milliseconds
-                val nowMs = System.currentTimeMillis()
 
-                // Filter down to the schedule for this channel
-                val channelSchedule = epgMatch
+              // Find the active channel inside our catalog to grab its epgId
+              val flatChannels = it.flatMap { it.channels }
+              val matchingChannel = flatChannels?.find { it.streamUrl == url }
+              val epgMatch = matchingChannel?.epg
 
-                // 1. Find the program running RIGHT NOW
-                val liveNow = channelSchedule.find { program ->
-                    val startMs = parseXmltvTimeToEpoch(program.startTime)
-                    val stopMs = parseXmltvTimeToEpoch(program.stopTime)
-                    nowMs in startMs..<stopMs
-                }
+              if (epgMatch != null) {
+                  // Get current system time in absolute milliseconds
+                  val nowMs = System.currentTimeMillis()
 
-                // 2. Find the program starting NEXT
-                val upNext = liveNow?.let { currentShow ->
-                    val currentShowStopMs = parseXmltvTimeToEpoch(currentShow.stopTime)
+                  // Filter down to the schedule for this channel
+                  val channelSchedule = epgMatch
 
-                    channelSchedule
-                        .filter { program ->
-                            parseXmltvTimeToEpoch(program.startTime) >= currentShowStopMs
-                        }
-                        .minByOrNull { parseXmltvTimeToEpoch(it.startTime) }
-                }
+                  // 1. Find the program running RIGHT NOW
+                  val liveNow = channelSchedule.find { program ->
+                      val startMs = parseXmltvTimeToEpoch(program.startTime)
+                      val stopMs = parseXmltvTimeToEpoch(program.stopTime)
+                      nowMs in startMs..<stopMs
+                  }
 
-                // 3. Construct your UI string layout
-                buildString {
-                    if (liveNow != null) {
-                        appendLine("🔴 LIVE NOW: ${liveNow.title}")
-                        if (!liveNow.desc.isNullOrBlank()) {
-                            appendLine(liveNow.desc)
-                        }
-                    } else {
-                        appendLine("🔴 LIVE NOW: Off-Air / No Schedule")
-                    }
+                  // 2. Find the program starting NEXT
+                  val upNext = liveNow?.let { currentShow ->
+                      val currentShowStopMs = parseXmltvTimeToEpoch(currentShow.stopTime)
 
-                    appendLine() // Visual separator space
+                      channelSchedule
+                          .filter { program ->
+                              parseXmltvTimeToEpoch(program.startTime) >= currentShowStopMs
+                          }
+                          .minByOrNull { parseXmltvTimeToEpoch(it.startTime) }
+                  }
 
-                    if (upNext != null) {
-                        appendLine("⏳ COMING UP NEXT: ${upNext.title}")
-                    } else {
-                        appendLine("⏳ COMING UP NEXT: Schedule Ends")
-                    }
-                }
-            } else {
-                "Live stream feed description unavailable."
-            }
+                  // 3. Construct your UI string layout
+                  buildString {
+                      if (liveNow != null) {
+                          appendLine("🔴 LIVE NOW: ${liveNow.title}")
+                          if (!liveNow.desc.isNullOrBlank()) {
+                              appendLine(liveNow.desc)
+                          }
+                      } else {
+                          appendLine("🔴 LIVE NOW: Off-Air / No Schedule")
+                      }
+
+                      appendLine() // Visual separator space
+
+                      if (upNext != null) {
+                          appendLine("⏳ COMING UP NEXT: ${upNext.title}")
+                      } else {
+                          appendLine("⏳ COMING UP NEXT: Schedule Ends")
+                      }
+                  }
+              } else {
+                  "Live stream feed description unavailable."
+              }
+          }
         } catch (e: Exception) {
             "Error rendering live EPG data window."
         }
+
 
         return newLiveStreamLoadResponse(
             name = "Live Feed",
@@ -160,7 +162,6 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
             dataUrl = url
         ) {
             this.plot = currentEpgText
-
         }
     }
 }
