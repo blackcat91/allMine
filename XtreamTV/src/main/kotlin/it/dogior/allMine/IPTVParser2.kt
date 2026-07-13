@@ -30,7 +30,6 @@ fun parseXmltvTimeToEpoch(timeStr: String): Long {
     }
 }
 
-//
 val supabaseKey = BuildConfig.SUPABASE_API
 val supabase = createSupabaseClient(
     supabaseUrl = "https://kwqbwdmmwwpufkownclf.supabase.co",
