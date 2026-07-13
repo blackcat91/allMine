@@ -165,6 +165,8 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
             dataUrl = url
         ) {
             this.plot = currentEpgText
+      
+            this.dataUrl = url
         }
     }
 }
