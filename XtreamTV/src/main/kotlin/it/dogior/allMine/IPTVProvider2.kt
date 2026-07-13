@@ -9,6 +9,7 @@ import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.util.concurrent.TimeUnit
 
 val clientOk = OkHttpClient.Builder()
@@ -157,16 +158,35 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
         } catch (e: Exception) {
             "Error rendering live EPG data window."
         }
+        // 1. Resolve the extensionless URL redirection to get the real tokenized URL
+        val resolvedTokenUrl = try {
+            // Build an OkHttpClient instance that intercepts and pauses at the redirect
+            val redirectCheckClient = clientOk.newBuilder()
+                .followRedirects(false)
+                .followSslRedirects(false)
+                .build()
+
+            val request = Request.Builder().url(url).build()
+            redirectCheckClient.newCall(request).execute().use { response ->
+                // Extract the 'Location' header containing the generated token parameters
+                val locationHeader = response.header("Location")
+
+                // Fall back to the original URL if the server didn't provide a redirect header
+                locationHeader ?: url
+            }
+        } catch (e: Exception) {
+            url // Fall back if the network handshake completely fails
+        }
 
         println("This IS THE URL!!!!  ${url}")
+        println("This IS THE RESOLVED URL!!!!  ${resolvedTokenUrl}")
         return newLiveStreamLoadResponse(
             name = "Live Feed",
             url = url,
             dataUrl = url
         ) {
             this.plot = currentEpgText
-            this.url = url
-            this.dataUrl = url
+            this.dataUrl = resolvedTokenUrl
         }
     }
 }
