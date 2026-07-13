@@ -83,10 +83,9 @@ subprojects {
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.0")
         implementation("com.fasterxml.jackson.core:jackson-databind:2.16.0")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.1") // JSON Parser
-        implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+        implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.8.0")
         implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
-        implementation(platform("io.github.jan-tennert.supabase:bom:3.0.1")) // Check for latest version
-        implementation("io.github.jan-tennert.supabase:storage-kt")
+
         implementation("io.ktor:ktor-client-android:2.3.12") // Use a Ktor engine suitable for your platform
     }
 }
