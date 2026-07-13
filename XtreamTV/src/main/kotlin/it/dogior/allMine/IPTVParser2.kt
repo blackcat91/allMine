@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.DecodeSequenceMode
 import kotlinx.serialization.json.Json
@@ -34,7 +35,7 @@ data class Link(
     val username: String,
     val password: String
 )
-@Serializable
+@InternalSerializationApi @Serializable
 data class Category(
     @JsonProperty("category_name") val categoryName: String,
     @JsonProperty("category_id") val categoryId: String,
@@ -42,7 +43,7 @@ data class Category(
     @JsonProperty("category_channels") val channels: List<Channel>,
 
     )
-@Serializable
+@InternalSerializationApi @Serializable
 data class Channel(
     @JsonProperty("num") val num: Int,
     @JsonProperty("name") val name: String,
@@ -60,7 +61,7 @@ data class Channel(
     @JsonProperty("epg") val epg: List<EPG>,
 
     )
-@Serializable
+@InternalSerializationApi @Serializable
 data class EPG(
     @JsonProperty("title") val title: String,
     @JsonProperty("desc") val desc: String,
@@ -69,7 +70,7 @@ data class EPG(
 
     )
 
-@OptIn(ExperimentalSerializationApi::class)
+@OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
 fun <T> fetchWithOkHttp(
     client: OkHttpClient,
     url: String,
@@ -93,8 +94,10 @@ fun <T> fetchWithOkHttp(
     }
 }
 
+@OptIn(InternalSerializationApi::class)
 var cachedCategories: List<Category>? = null
 
+@OptIn(InternalSerializationApi::class)
 suspend fun getCategories(jsonCatalogUrl : String): List<Category>? {
     // If we already downloaded it, return the cache
     cachedCategories?.let { return it }

@@ -5,6 +5,7 @@ import com.lagradost.cloudstream3.network.buildDefaultClient
 import com.lagradost.cloudstream3.utils.*
 import com.lagradost.cloudstream3.utils.AppUtils.parseJson
 import com.lagradost.cloudstream3.utils.AppUtils.toJson
+import kotlinx.serialization.InternalSerializationApi
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
@@ -13,6 +14,8 @@ val clientOk = OkHttpClient.Builder()
     .connectTimeout(30, TimeUnit.SECONDS)
     .readTimeout(30, TimeUnit.SECONDS)
     .build()
+
+
 class MyLiveTVProvider : MainAPI() { // All providers must be an instance of MainAPI
     override var mainUrl = "https://kwqbwdmmwwpufkownclf.supabase.co/"
     override var name = "IPTV Provider"
@@ -23,6 +26,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
 
     override var lang = "en"
 
+
     // Enable this when your provider has a main page
     override val hasMainPage = true
 
@@ -30,13 +34,14 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
 
 
 
+    @OptIn(InternalSerializationApi::class)
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse? {
 
 
 
         // Map every JSON category entry to a dedicated horizontal shelf row
           val pages : HomePageResponse? = fetchWithOkHttp(clientOk, jsonCatalogUrl)  { categories ->
-
+                 cachedCategories = categories
                  newHomePageResponse(categories.map { group ->
                     val searchResponses = group.channels.map { channel ->
                         // Use TvType.Live here
@@ -54,26 +59,46 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
 
     // This function gets called when you search for something
     // The search function takes a 'query' string (whatever the user typed in the search bar)
+    @OptIn(InternalSerializationApi::class)
     override suspend fun search(query: String): List<LiveSearchResponse>? {
-        val categories = getCategories(jsonCatalogUrl) // Uses cache if available
 
-        return categories
-            ?.flatMap { it.channels }
-            ?.filter { it.name.contains(query, ignoreCase = true) }
-            ?.map { stream ->
-                newLiveSearchResponse(stream.name, stream.streamUrl, TvType.Live) {
-                    this.posterUrl = stream.streamIcon
+        if (cachedCategories != null) {
+
+            return cachedCategories?.flatMap { it.channels }
+                ?.filter { it.name.contains(query, ignoreCase = true) }
+                ?.map { stream ->
+                    newLiveSearchResponse(stream.name, stream.streamUrl, TvType.Live) {
+                        this.posterUrl = stream.streamIcon
+                    }
                 }
+
+        } else {
+
+            return fetchWithOkHttp(clientOk, jsonCatalogUrl) { categories ->
+                cachedCategories = categories
+                categories?.flatMap { it.channels }
+                    ?.filter { it.name.contains(query, ignoreCase = true) }
+                    ?.map { stream ->
+                        newLiveSearchResponse(stream.name, stream.streamUrl, TvType.Live) {
+                            this.posterUrl = stream.streamIcon
+                        }
+                    }
             }
+
+        }
     }
 
+
+    @OptIn(InternalSerializationApi::class)
     override suspend fun load(url: String): LoadResponse? {
         // Fetch current EPG track data matching this stream if available
         val currentEpgText = try {
 
-
+            if(cachedCategories == null) {
+                cachedCategories =  fetchWithOkHttp(clientOk, jsonCatalogUrl) { it }
+            }
             // Find the active channel inside our catalog to grab its epgId
-            val flatChannels = getCategories(jsonCatalogUrl)?.flatMap { it.channels }
+            val flatChannels = cachedCategories?.flatMap { it.channels }
             val matchingChannel = flatChannels?.find { it.streamUrl == url }
             val epgMatch = matchingChannel?.epg
 
