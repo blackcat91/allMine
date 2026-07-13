@@ -23,7 +23,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
     override var name = "IPTV Provider"
     override val hasQuickSearch = true
     override val hasDownloadSupport = false
-    override val supportedTypes = setOf(TvType.Live)
+    override val supportedTypes = setOf(TvType.Live, TvType.TvSeries)
     private val jsonCatalogUrl = "https://kwqbwdmmwwpufkownclf.supabase.co/storage/v1/object/public/Main/myCategories.json"
 
     override var lang = "en"
