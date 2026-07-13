@@ -31,7 +31,7 @@ class IPTVPlugin : Plugin() {
                 if (pluginData != null) {
                     PluginManager.unloadPlugin(pluginData.filePath)
                 } else {
-                    registerMainAPI(IPTVProvider(link.url, link.name))
+                    registerMainAPI(MyLiveTVProvider())
                 }
             }
             MainActivity.afterPluginsLoadedEvent.invoke(true)
