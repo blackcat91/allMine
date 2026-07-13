@@ -25,7 +25,7 @@ class IPTVPlugin : Plugin() {
 
     fun reload() {
         try {
-            val savedLinks = getKey<Array<Channel>>("iptv_links") ?: emptyArray()
+            val savedLinks = getKey<Array<Link>>("iptv_links") ?: emptyArray()
             savedLinks.forEach { link ->
                 val pluginData = PluginManager.getPluginsOnline().find { it.internalName.contains(link.name) }
                 if (pluginData != null) {

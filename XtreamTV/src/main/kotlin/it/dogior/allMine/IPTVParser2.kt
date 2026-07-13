@@ -165,3 +165,22 @@ data class EPG(
     @JsonProperty("stop_time") val stopTime: String,
 
     )
+
+private var cachedCategories: List<Category>? = null
+
+suspend fun getCategories(jsonCatalogUrl : String): List<Category>? {
+    // If we already downloaded it, return the cache
+    cachedCategories?.let { return it }
+
+    try {
+        // Otherwise, fetch and cache it
+        val jsonRaw = app.get(jsonCatalogUrl).text
+        val parsed = parseJson<List<Category>>(jsonRaw)
+        cachedCategories = parsed
+        return parsed
+    }
+    catch (e: Exception){
+        println("Bad Error: ${e.message}" )
+    }
+    return cachedCategories
+}

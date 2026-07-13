@@ -9,8 +9,9 @@ import okhttp3.Interceptor
 class MyLiveTVProvider : MainAPI() { // All providers must be an instance of MainAPI
     override var mainUrl = "https://kwqbwdmmwwpufkownclf.supabase.co/"
     override var name = "IPTV Provider"
+    override val hasQuickSearch = true
+    override val hasDownloadSupport = false
     override val supportedTypes = setOf(TvType.Live)
-
     private val jsonCatalogUrl = getPublicUrl("myCategories.json")
     private val jsonEpgUrl = getPublicUrl("epg.xml")
 
@@ -21,46 +22,37 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
 
     // Memory cache for the parsed categories
 
-    private var cachedCategories: List<Category>? = null
 
-    private suspend fun getCategories(): List<Category> {
-        // If we already downloaded it, return the cache
-        cachedCategories?.let { return it }
-
-        // Otherwise, fetch and cache it
-        val jsonRaw = app.get(jsonCatalogUrl).text
-        val parsed = parseJson<List<Category>>(jsonRaw)
-        cachedCategories = parsed
-        return parsed
-    }
 
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse? {
 
-        val categories = getCategories()
+        val categories = getCategories(jsonCatalogUrl)
 
         // Map every JSON category entry to a dedicated horizontal shelf row
-        val homePageLists = categories.map { group ->
-            val searchResponses = group.channels.map { channel ->
-                // Use TvType.Live here
-                newLiveSearchResponse(channel.name, channel.streamUrl, TvType.Live) {
-                    this.posterUrl = channel.streamIcon
-                }
-            }
-            HomePageList(group.category_name, searchResponses)
-        }
 
-        return newHomePageResponse(homePageLists, hasNext = false)
+        if (categories != null) {
+            return newHomePageResponse(categories.map { group ->
+                val searchResponses = group.channels.map { channel ->
+                    // Use TvType.Live here
+                    newLiveSearchResponse(channel.name, channel.streamUrl, TvType.Live) {
+                        this.posterUrl = channel.streamIcon
+                    }
+                }
+                HomePageList(group.category_name, searchResponses)
+            }, hasNext = false)
+        }
+        return TODO("Something Went Wrong!")
     }
 
     // This function gets called when you search for something
     // The search function takes a 'query' string (whatever the user typed in the search bar)
-    override suspend fun search(query: String): List<SearchResponse> {
-        val categories = getCategories() // Uses cache if available
+    override suspend fun search(query: String): List<LiveSearchResponse>? {
+        val categories = getCategories(jsonCatalogUrl) // Uses cache if available
 
         return categories
-            .flatMap { it.channels }
-            .filter { it.name.contains(query, ignoreCase = true) }
-            .map { stream ->
+            ?.flatMap { it.channels }
+            ?.filter { it.name.contains(query, ignoreCase = true) }
+            ?.map { stream ->
                 newLiveSearchResponse(stream.name, stream.streamUrl, TvType.Live) {
                     this.posterUrl = stream.streamIcon
                 }
@@ -74,8 +66,8 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
             val epgList = parseJson<List<EPG>>(epgRaw)
 
             // Find the active channel inside our catalog to grab its epgId
-            val flatChannels = getCategories().flatMap { it.channels }
-            val matchingChannel = flatChannels.find { it.streamUrl == url }
+            val flatChannels = getCategories(jsonCatalogUrl)?.flatMap { it.channels }
+            val matchingChannel = flatChannels?.find { it.streamUrl == url }
             val epgMatch = matchingChannel?.epg
 
             if (epgMatch != null) {
@@ -129,10 +121,9 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
             "Error rendering live EPG data window."
         }
 
-        return newMovieLoadResponse(
+        return newLiveStreamLoadResponse(
             name = "Live Feed",
             url = url,
-            type = TvType.Live,
             dataUrl = url
         ) {
             this.plot = currentEpgText
