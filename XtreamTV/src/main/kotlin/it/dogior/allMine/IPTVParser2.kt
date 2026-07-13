@@ -3,11 +3,11 @@ package it.dogior.allMine
 import java.io.InputStream
 import com.lagradost.cloudstream3.*
 import com.lagradost.cloudstream3.utils.AppUtils.parseJson
-import com.fasterxml.jackson.annotation.JsonProperty
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.DecodeSequenceMode
 import kotlinx.serialization.json.Json
@@ -37,36 +37,36 @@ data class Link(
 )
 @InternalSerializationApi @Serializable
 data class Category(
-    @JsonProperty("category_name") val categoryName: String,
-    @JsonProperty("category_id") val categoryId: String,
-    @JsonProperty("parent_id") val parentId: Int,
-    @JsonProperty("category_channels") val channels: List<Channel>,
+    @SerialName("category_name") val categoryName: String,
+    @SerialName("category_id") val categoryId: String,
+    @SerialName("parent_id") val parentId: Int,
+    @SerialName("category_channels") val channels: List<Channel>,
 
     )
 @InternalSerializationApi @Serializable
 data class Channel(
-    @JsonProperty("num") val num: Int,
-    @JsonProperty("name") val name: String,
-    @JsonProperty("stream_type") val streamType: String,
-    @JsonProperty("stream_id") val streamId: Int,
-    @JsonProperty("stream_icon") val streamIcon: String,
-    @JsonProperty("epg_channel_id") val epgChannelId: String,
-    @JsonProperty("added") val added: String,
-    @JsonProperty("category_id") val categoryId: String,
-    @JsonProperty("custom_sid") val customSid: String,
-    @JsonProperty("tv_archive") val tvArchive: Int,
-    @JsonProperty("direct_source") val directSource: String,
-    @JsonProperty("tv_archive_duration") val tvArchiveuration: Int,
-    @JsonProperty("stream_url") val streamUrl: String,
-    @JsonProperty("epg") val epg: List<EPG>,
+    @SerialName("num") val num: Int,
+    @SerialName("name") val name: String,
+    @SerialName("stream_type") val streamType: String,
+    @SerialName("stream_id") val streamId: Int,
+    @SerialName("stream_icon") val streamIcon: String,
+    @SerialName("epg_channel_id") val epgChannelId: String,
+    @SerialName("added") val added: String,
+    @SerialName("category_id") val categoryId: String,
+    @SerialName("custom_sid") val customSid: String,
+    @SerialName("tv_archive") val tvArchive: Int,
+    @SerialName("direct_source") val directSource: String,
+    @SerialName("tv_archive_duration") val tvArchiveuration: Int,
+    @SerialName("stream_url") val streamUrl: String,
+    @SerialName("epg") val epg: List<EPG>,
 
     )
 @InternalSerializationApi @Serializable
 data class EPG(
-    @JsonProperty("title") val title: String,
-    @JsonProperty("desc") val desc: String,
-    @JsonProperty("start_time") val startTime: String,
-    @JsonProperty("stop_time") val stopTime: String,
+    @SerialName("title") val title: String,
+    @SerialName("desc") val desc: String,
+    @SerialName("start_time") val startTime: String,
+    @SerialName("stop_time") val stopTime: String,
 
     )
 
