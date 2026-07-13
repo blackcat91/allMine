@@ -87,7 +87,7 @@ data class EPG(
 fun <T> fetchWithOkHttp(
     client: OkHttpClient,
     url: String,
-    action: (Sequence<Category>) -> T
+    action: (List<Category>) -> T
 ): T? {
     val request = Request.Builder().url(url).build()
 
@@ -103,7 +103,7 @@ fun <T> fetchWithOkHttp(
 
         // The result of action(itemSequence) is evaluated here
         // and returned out of the .use {} block
-        action(itemSequence)
+        action(itemSequence.toList())
     }
 }
 

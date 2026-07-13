@@ -37,7 +37,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
         // Map every JSON category entry to a dedicated horizontal shelf row
           val pages : HomePageResponse? = fetchWithOkHttp(clientOk, jsonCatalogUrl)  { categories ->
 
-                 newHomePageResponse(categories.toList().map { group ->
+                 newHomePageResponse(categories.map { group ->
                     val searchResponses = group.channels.map { channel ->
                         // Use TvType.Live here
                         newLiveSearchResponse(channel.name, channel.streamUrl, TvType.Live) {
