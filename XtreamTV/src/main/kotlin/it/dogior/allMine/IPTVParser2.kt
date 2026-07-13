@@ -56,6 +56,7 @@ data class Category(
     @JsonProperty("category_channels") val channels: List<Channel>,
 
     )
+@Serializable
 data class Channel(
     @JsonProperty("num") val num: Int,
     @JsonProperty("name") val name: String,
@@ -73,7 +74,7 @@ data class Channel(
     @JsonProperty("epg") val epg: List<EPG>,
 
     )
-
+@Serializable
 data class EPG(
     @JsonProperty("title") val title: String,
     @JsonProperty("desc") val desc: String,
