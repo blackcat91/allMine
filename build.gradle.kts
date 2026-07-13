@@ -42,7 +42,7 @@ subprojects {
     }
 
     android {
-        namespace = "it.blackcat.allMine"
+        namespace = "it.dogior.allMine"
         defaultConfig {
             minSdk = 21
             compileSdkVersion(35)
