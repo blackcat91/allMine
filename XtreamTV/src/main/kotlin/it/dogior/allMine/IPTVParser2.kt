@@ -15,6 +15,7 @@ import kotlinx.serialization.encoding.Encoder
 import kotlin.time.Duration
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.time.Instant
 
 fun parseXmltvTimeToEpoch(timeStr: String): Long {
     return try {
@@ -58,7 +59,8 @@ object UserLocaleDateTimeSerializer : KSerializer<LocalDateTime> {
 
 // Define the reusable custom formatter
 val customFormat = DateTimeComponents.Format {
-    year(); monthNumber(); dayOfMonth()
+    year(); monthNumber();
+    day(padding = Padding.ZERO);
     hour(); minute(); second()
     chars(" ")
     offset(UtcOffset.Formats.FOUR_DIGITS)
