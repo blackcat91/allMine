@@ -26,17 +26,22 @@ allprojects {
         maven("https://jitpack.io")
     }
 }
-
+plugins {
+    // Trick Gradle into caching the plugins globally with a version
+    kotlin("jvm") version "2.0.0" apply false
+    kotlin("plugin.serialization") version "2.0.0" apply false
+}
 fun Project.cloudstream(configuration: CloudstreamExtension.() -> Unit) = extensions.getByName<CloudstreamExtension>("cloudstream").configuration()
 
 fun Project.android(configuration: BaseExtension.() -> Unit) = extensions.getByName<BaseExtension>("android").configuration()
 
 subprojects {
+
     apply(plugin = "com.android.library")
     apply(plugin = "kotlin-android")
     apply(plugin = "com.lagradost.cloudstream3.gradle")
-    apply(plugin = "plugin.serialization")
-    
+    apply(plugin = "org.jetbrains.kotlin.plugin.serialization" )
+
     cloudstream {
         // when running through github workflow, GITHUB_REPOSITORY should contain current repository name
         setRepo(System.getenv("GITHUB_REPOSITORY") ?: "https://github.com/blackcat91/allMine")
