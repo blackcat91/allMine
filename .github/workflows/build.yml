@@ -47,10 +47,12 @@ jobs:
       - name: Access Secrets
         env:
           TMDB_API: ${{ secrets.TMDB_API }}
+          SUPABASE_API: ${{ secrets.SUPABASE_API }}
         run: |
           cd $GITHUB_WORKSPACE/src
           echo TMDB_API=$TMDB_API >> secrets.properties
           echo SIMKL_CLIENT_ID=$SIMKL_CLIENT_ID >> secrets.properties
+          echo SUPABASE_API=$SUPABASE_API >> secrets.properties
 
       - name: Build Plugins
         run: |
