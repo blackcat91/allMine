@@ -139,7 +139,7 @@ data class EPG(
 
     )
 
-private var cachedCategories: List<Category>? = null
+var cachedCategories: List<Category>? = null
 
 suspend fun getCategories(jsonCatalogUrl : String): List<Category>? {
     // If we already downloaded it, return the cache
