@@ -12,12 +12,21 @@ class IPTVPlugin : Plugin() {
         reload()
     }
 
-
+    init {
+        this.openSettings = { ctx ->
+            val activity = ctx as AppCompatActivity
+            try {
+                val frag = IPTVSettingsFragment(this)
+                frag.show(activity.supportFragmentManager, "IPTV")
+            } catch (e: Exception) {
+            }
+        }
+    }
 
     fun reload() {
         try {
             registerMainAPI(MyLiveTVProvider())
-           
+            MainActivity.afterPluginsLoadedEvent.invoke(true)
         } catch (e: Exception) {
         }
     }
