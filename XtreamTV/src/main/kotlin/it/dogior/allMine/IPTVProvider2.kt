@@ -91,17 +91,19 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
 
 
     @OptIn(InternalSerializationApi::class)
-    override suspend fun load(url: String): LoadResponse? {
+    override suspend fun load(url: String): LoadResponse {
+
+
         println("This IS THE URL!!!!  ${url}")
         // Fetch current EPG track data matching this stream if available
         val currentEpgText = try {
 
-          fetchWithOkHttp(clientOk, jsonCatalogUrl) {
+          fetchWithOkHttp(clientOk, jsonCatalogUrl) { it ->
 
 
               // Find the active channel inside our catalog to grab its epgId
               val flatChannels = it.flatMap { it.channels }
-              val matchingChannel = flatChannels?.find { it.streamUrl == url }
+              val matchingChannel = flatChannels.find { it.streamUrl == url }
               val epgMatch = matchingChannel?.epg
 
               if (epgMatch != null) {
