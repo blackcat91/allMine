@@ -158,35 +158,62 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
         } catch (e: Exception) {
             "Error rendering live EPG data window."
         }
-        // 1. Resolve the extensionless URL redirection to get the real tokenized URL
-        val resolvedTokenUrl = try {
-            // Build an OkHttpClient instance that intercepts and pauses at the redirect
-            val redirectCheckClient = clientOk.newBuilder()
-                .followRedirects(false)
-                .followSslRedirects(false)
-                .build()
 
-            val request = Request.Builder().url(url).build()
-            redirectCheckClient.newCall(request).execute().use { response ->
-                // Extract the 'Location' header containing the generated token parameters
-                val locationHeader = response.header("Location")
 
-                // Fall back to the original URL if the server didn't provide a redirect header
-                locationHeader ?: url
-            }
-        } catch (e: Exception) {
-            url // Fall back if the network handshake completely fails
-        }
+        println("This IS THE URL!!!!  $url")
 
-        println("This IS THE URL!!!!  ${url}")
-        println("This IS THE RESOLVED URL!!!!  ${resolvedTokenUrl}")
         return newLiveStreamLoadResponse(
             name = "Live Feed",
             url = url,
             dataUrl = url
         ) {
             this.plot = currentEpgText
-            this.dataUrl = resolvedTokenUrl
+
         }
+    }
+
+    // 2. STEP TWO: Resolve the token link and pop it into the VLC player menu
+    override suspend fun loadLinks(
+        data: String, // This is the 'url' string passed from dataUrl above
+        isCasting: Boolean,
+        subtitleCallback: (com.lagradost.cloudstream3.SubtitleFile) -> Unit,
+        callback: (ExtractorLink) -> Unit
+    ): Boolean {
+        // A. Resolve the location redirect header to grab your tokenized live link
+        val resolvedTokenUrl = try {
+            val redirectCheckClient = clientOk.newBuilder()
+                .followRedirects(false)
+                .followSslRedirects(false)
+                .build()
+
+            val request = Request.Builder().url(data).build()
+            redirectCheckClient.newCall(request).execute().use { response ->
+                response.header("Location") ?: data
+            }
+        } catch (e: Exception) {
+            data
+        }
+        println("This IS THE RESOLVED URL!!!!  $resolvedTokenUrl")
+        // B. Apply the fragment extension suffix trick so VLC forces its HLS adaptive engine
+        val formattedUrlForVlc = if (!resolvedTokenUrl.contains(".m3u8", ignoreCase = true)) {
+            "$resolvedTokenUrl#.m3u8"
+        } else {
+            resolvedTokenUrl
+        }
+
+        // C. Construct the modern extractor link tracking packet
+        val streamLink = newExtractorLink(
+            source = this.name,
+            name = "Live TV (HLS)",
+            url = formattedUrlForVlc,
+            type = ExtractorLinkType.M3U8 // Forces VLC to skip raw file extension validation
+        ) {
+            this.quality = Qualities.P1080.value
+        }
+
+        // D. Invoke the callback. This fills that empty popup option menu instantly!
+        callback(streamLink)
+
+        return true // Signals the framework that links were successfully resolved
     }
 }
