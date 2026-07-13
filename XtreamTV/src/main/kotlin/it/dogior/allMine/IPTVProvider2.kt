@@ -209,6 +209,18 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
             type = ExtractorLinkType.M3U8 // Forces VLC to skip raw file extension validation
         ) {
             this.quality = Qualities.P1080.value
+            // INJECT PERSISTENT RECONNECTION PROPERTIES HERE:
+            this.headers = mapOf(
+                "Accept" to "*/*",
+                "User-Agent" to "VLC/3.0.0 LibVLC/3.0.0",
+
+                // Tells ExoPlayer/VLC to repeatedly attempt loading broken transport segments
+                "X-Disconnect-Retry-Count" to "99",
+                "X-Playback-Session-Id" to System.currentTimeMillis().toString(),
+
+                // Modifies low-level Socket connection parameters to keep the pipe alive
+                "keep-alive" to "timeout=60, max=100"
+            )
         }
 
         // D. Invoke the callback. This fills that empty popup option menu instantly!
