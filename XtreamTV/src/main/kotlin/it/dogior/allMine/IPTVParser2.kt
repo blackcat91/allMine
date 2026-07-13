@@ -12,9 +12,6 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.storage.Storage
-import io.github.jan.supabase.storage.storage
 import kotlin.time.Duration
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,33 +27,7 @@ fun parseXmltvTimeToEpoch(timeStr: String): Long {
     }
 }
 
-val supabaseKey = BuildConfig.SUPABASE_API
-val supabase = createSupabaseClient(
-    supabaseUrl = "https://kwqbwdmmwwpufkownclf.supabase.co",
-    supabaseKey = supabaseKey
-) {
-    install(Storage)
-}
 
-fun getPublicUrl(filename: String): String {
-    return supabase.storage.from("Main").publicUrl(path = filename)
-}
-
-suspend fun getSignedUrl(filename : String): String {
-    return supabase.storage.from("Main").createSignedUrl(
-        path = filename,
-        expiresIn = Duration.parse("20m") // Expires in 60 seconds
-    )
-}
-
-suspend fun downloadFileToMemory(filename : String): ByteArray {
-    // Fetches the file data from your bucket path into a ByteArray
-    val fileBytes: ByteArray = supabase.storage
-        .from("Main")
-        .downloadAuthenticated(path = filename)
-
-    return fileBytes
-}
 
 object UserLocaleDateTimeSerializer : KSerializer<LocalDateTime> {
     override val descriptor: SerialDescriptor =

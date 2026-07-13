@@ -19,13 +19,7 @@ android {
         buildConfig = true
         viewBinding = true
     }
-    defaultConfig {
-        val apiKey = System.getenv("SUPABASE_API")
-        val properties = Properties()
-        properties.load(project.rootProject.file("secrets.properties").inputStream())
-        android.buildFeatures.buildConfig = true
-        buildConfigField("String", "SUPABASE_API", "\"${properties.getProperty("SUPABASE_API")}\"")
-    }
+    
 }
 
 
