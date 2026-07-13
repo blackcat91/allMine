@@ -79,7 +79,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
                 val liveNow = channelSchedule.find { program ->
                     val startMs = parseXmltvTimeToEpoch(program.startTime)
                     val stopMs = parseXmltvTimeToEpoch(program.stopTime)
-                    nowMs >= startMs && nowMs < stopMs
+                    nowMs in startMs..<stopMs
                 }
 
                 // 2. Find the program starting NEXT

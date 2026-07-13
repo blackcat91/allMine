@@ -24,6 +24,7 @@ fun parseXmltvTimeToEpoch(timeStr: String): Long {
         val date = formatter.parse(timeStr)
         date?.time ?: 0L
     } catch (e: Exception) {
+        println("Bad Error: ${e.message}")
         0L
     }
 }
@@ -116,16 +117,16 @@ data class Category(
 data class Channel(
     @JsonProperty("num") val num: Int,
     @JsonProperty("name") val name: String,
-    @JsonProperty("stream_type") val stream_type: String,
-    @JsonProperty("stream_id") val stream_id: Int,
+    @JsonProperty("stream_type") val streamType: String,
+    @JsonProperty("stream_id") val streamId: Int,
     @JsonProperty("stream_icon") val streamIcon: String,
-    @JsonProperty("epg_channel_id") val epg_channel_id: String,
+    @JsonProperty("epg_channel_id") val epgChannelId: String,
     @JsonProperty("added") val added: String,
-    @JsonProperty("category_id") val category_id: String,
-    @JsonProperty("custom_sid") val custom_sid: String,
-    @JsonProperty("tv_archive") val tv_archive: Int,
-    @JsonProperty("direct_source") val direct_source: String,
-    @JsonProperty("tv_archive_duration") val tv_archive_duration: Int,
+    @JsonProperty("category_id") val categoryId: String,
+    @JsonProperty("custom_sid") val customSid: String,
+    @JsonProperty("tv_archive") val tvArchive: Int,
+    @JsonProperty("direct_source") val directSource: String,
+    @JsonProperty("tv_archive_duration") val tvArchiveuration: Int,
     @JsonProperty("stream_url") val streamUrl: String,
     @JsonProperty("epg") val epg: List<EPG>,
 
