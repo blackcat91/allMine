@@ -2,12 +2,7 @@ package it.dogior.allMine
 
 import java.io.InputStream
 
-data class Link(
-    val name: String, 
-    val url: String,
-    val username: String,
-    val password: String
-)
+
 
 data class Playlist(
     val items: List<PlaylistItem> = emptyList()

@@ -127,7 +127,12 @@ fun testCompare() {
 
     println("User's Local Phone Time: $localDateTime")
 }
-
+data class Link(
+    val name: String,
+    val url: String,
+    val username: String,
+    val password: String
+)
 data class Category(
     @JsonProperty("category_name") val category_name: String,
     @JsonProperty("category_id") val category_id: String,

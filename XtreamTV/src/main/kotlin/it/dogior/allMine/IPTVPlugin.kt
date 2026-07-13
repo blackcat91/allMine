@@ -25,7 +25,15 @@ class IPTVPlugin : Plugin() {
 
     fun reload() {
         try {
-            registerMainAPI(MyLiveTVProvider())
+            val savedLinks = getKey<Array<Channel>>("iptv_links") ?: emptyArray()
+            savedLinks.forEach { link ->
+                val pluginData = PluginManager.getPluginsOnline().find { it.internalName.contains(link.name) }
+                if (pluginData != null) {
+                    PluginManager.unloadPlugin(pluginData.filePath)
+                } else {
+                    registerMainAPI(MyLiveTVProvider())
+                }
+            }
             MainActivity.afterPluginsLoadedEvent.invoke(true)
         } catch (e: Exception) {
         }
