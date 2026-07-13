@@ -94,7 +94,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
     override suspend fun load(url: String): LoadResponse {
 
 
-        println("This IS THE URL!!!!  ${url}")
+
         // Fetch current EPG track data matching this stream if available
         val currentEpgText = try {
 
@@ -158,7 +158,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
             "Error rendering live EPG data window."
         }
 
-
+        println("This IS THE URL!!!!  ${url}")
         return newLiveStreamLoadResponse(
             name = "Live Feed",
             url = url,
