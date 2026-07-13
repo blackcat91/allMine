@@ -12,8 +12,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
     override val hasQuickSearch = true
     override val hasDownloadSupport = false
     override val supportedTypes = setOf(TvType.Live)
-    private val jsonCatalogUrl = getPublicUrl("myCategories.json")
-    private val jsonEpgUrl = getPublicUrl("epg.xml")
+    private val jsonCatalogUrl = "https://kwqbwdmmwwpufkownclf.supabase.co/storage/v1/object/public/Main/myCategories.json"
 
     override var lang = "en"
 
@@ -62,8 +61,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
     override suspend fun load(url: String): LoadResponse? {
         // Fetch current EPG track data matching this stream if available
         val currentEpgText = try {
-            val epgRaw = app.get(jsonEpgUrl).text
-            val epgList = parseJson<List<EPG>>(epgRaw)
+
 
             // Find the active channel inside our catalog to grab its epgId
             val flatChannels = getCategories(jsonCatalogUrl)?.flatMap { it.channels }
