@@ -63,10 +63,10 @@ data class Channel(
     )
 @InternalSerializationApi @Serializable
 data class EPG(
-    @SerialName("title") val title: String?,
-    @SerialName("desc") val desc: String?,
-    @SerialName("start_time") val startTime: String?,
-    @SerialName("stop_time") val stopTime: String?,
+    @SerialName("title") val title: String = "",
+    @SerialName("desc") val desc: String,
+    @SerialName("start_time") val startTime: String,
+    @SerialName("stop_time") val stopTime: String,
 
     )
 
