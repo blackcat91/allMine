@@ -239,9 +239,11 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
         val streamLink = newExtractorLink(
             source = this.name,
             name = "Live TV (HLS)",
-            url = formattedUrlForVlc,
-            type = ExtractorLinkType.M3U8 // Forces VLC to skip raw file extension validation
+            url = resolvedTokenUrl,
+            type = ExtractorLinkType.M3U8, // Forces VLC to skip raw file extension validation
+
         ) {
+
             this.quality = Qualities.Unknown.value
             // INJECT PERSISTENT RECONNECTION PROPERTIES HERE:
             this.headers = mapOf(
