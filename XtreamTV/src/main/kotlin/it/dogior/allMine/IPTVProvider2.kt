@@ -180,7 +180,7 @@ class MyLiveTVProvider : MainAPI() {
         val streamLink = newExtractorLink(
             source = this.name,
             name = "Live TV (HLS)",
-            url = formattedUrlForVlc,
+            url = resolvedTokenUrl,
             type = ExtractorLinkType.M3U8
         ) {
             this.quality = Qualities.Unknown.value
