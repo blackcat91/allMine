@@ -12,6 +12,19 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.util.concurrent.TimeUnit
 
+
+val headers  = mapOf(
+    "Accept" to "*/*",
+    "User-Agent" to "Player (Linux; Android 14)",
+
+    // Tells ExoPlayer/VLC to repeatedly attempt loading broken transport segments
+    "X-Disconnect-Retry-Count" to "99",
+    "X-Playback-Session-Id" to System.currentTimeMillis().toString(),
+
+    // Modifies low-level Socket connection parameters to keep the pipe alive
+    "keep-alive" to "timeout=60, max=100"
+)
+
 val clientOk = OkHttpClient.Builder()
     .connectTimeout(30, TimeUnit.SECONDS)
     .readTimeout(30, TimeUnit.SECONDS)
@@ -37,7 +50,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
     // Enable this when your provider has a main page
     override val hasMainPage = false
     override val mainPage = mainPageOf("channels" to "Live IPTV Channels")
-    private val headers = mapOf("User-Agent" to "Player (Linux; Android 14)")
+
     // Memory cache for the parsed categories
 
 
@@ -229,7 +242,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
             url = formattedUrlForVlc,
             type = ExtractorLinkType.M3U8 // Forces VLC to skip raw file extension validation
         ) {
-            this.quality = Qualities.P1080.value
+            this.quality = Qualities.Unknown.value
             // INJECT PERSISTENT RECONNECTION PROPERTIES HERE:
             this.headers = mapOf(
                 "Accept" to "*/*",
