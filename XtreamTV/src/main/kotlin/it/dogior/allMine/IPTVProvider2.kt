@@ -27,9 +27,9 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
     private val jsonCatalogUrl = "https://kwqbwdmmwwpufkownclf.supabase.co/storage/v1/object/public/Main/myCategories.json"
     override var lang = "en"
     // Enable this when your provider has a main page
-    override val hasMainPage = false
+    override val hasMainPage = true
     override val mainPage = mainPageOf("channels" to "Live IPTV Channels")
-    private val headers = mapOf("User-Agent" to "Player (Linux; Android 14)")
+
     // Memory cache for the parsed categories
 
 
@@ -221,16 +221,20 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
             url = formattedUrlForVlc,
             type = ExtractorLinkType.M3U8 // Forces VLC to skip raw file extension validation
         ) {
-            this.quality = Qualities.P1080.value
+            this.quality = Qualities.Unknown.value
             // INJECT PERSISTENT RECONNECTION PROPERTIES HERE:
+            // ADD THESE PERFORMANCE HEADERS:
+
             this.headers = mapOf(
                 "Accept" to "*/*",
-                "User-Agent" to "VLC/3.0.0 LibVLC/3.0.0",
-
+                "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+                "Connection" to "keep-alive",
                 // Tells ExoPlayer/VLC to repeatedly attempt loading broken transport segments
                 "X-Disconnect-Retry-Count" to "99",
                 "X-Playback-Session-Id" to System.currentTimeMillis().toString(),
-
+                "Accept-Encoding" to "gzip, deflate, br",
+                "Cache-Control" to "no-cache",
+                "Pragma" to "no-cache",
                 // Modifies low-level Socket connection parameters to keep the pipe alive
                 "keep-alive" to "timeout=60, max=100"
             )
