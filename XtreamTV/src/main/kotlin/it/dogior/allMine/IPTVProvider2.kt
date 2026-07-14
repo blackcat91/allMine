@@ -8,10 +8,30 @@ import kotlinx.serialization.json.DecodeSequenceMode
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.util.concurrent.TimeUnit
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
+
+
+// A permissive TrustManager that completely bypasses custom SSL validation issues
+val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+    override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
+    override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
+    override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
+})
+
+val sslContext = SSLContext.getInstance("SSL").apply {
+    init(null, trustAllCerts, SecureRandom())
+}
 
 val clientOk = OkHttpClient.Builder()
     .connectTimeout(30, TimeUnit.SECONDS)
     .readTimeout(30, TimeUnit.SECONDS)
+    // CRITICAL: Attach the relaxed SSL socket configurations here
+    .sslSocketFactory(sslContext.socketFactory, trustAllCerts[0] as X509TrustManager)
+    .hostnameVerifier { _, _ -> true } // Accepts the domain verification handshake
     .build()
 
 
