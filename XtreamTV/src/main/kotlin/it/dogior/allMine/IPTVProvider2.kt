@@ -184,7 +184,7 @@ class MyLiveTVProvider : MainAPI() {
             name = "Live TV (HLS)",
 
             url = resolvedTokenUrl,
-            type = ExtractorLinkType.VIDEO
+            type = ExtractorLinkType.M3U8
         ) {
             this.referer = "https://ck24.ws"
             this.quality = Qualities.Unknown.value
