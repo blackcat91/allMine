@@ -173,10 +173,10 @@ class MyLiveTVProvider : MainAPI() {
             data
         }
 
-        val formattedUrlForVlc = if (!resolvedTokenUrl.contains(".m3u8", ignoreCase = true)) {
-            "$resolvedTokenUrl#.m3u8"
+        val formatHintUrl = if (resolvedTokenUrl.contains("?")) {
+            "$resolvedTokenUrl&output=ts"
         } else {
-            resolvedTokenUrl
+            "$resolvedTokenUrl?output=ts"
         }
         //Link
         val streamLink = newExtractorLink(
