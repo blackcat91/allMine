@@ -19,15 +19,15 @@ val clientOk = OkHttpClient.Builder()
 
 
 class MyLiveTVProvider : MainAPI() { // All providers must be an instance of MainAPI
-    override var mainUrl = "https://kwqbwdmmwwpufkownclf.supabase.co/"
-    override var name = "IPTV Provider"
+    override var mainUrl = "https://github.com/blackcat91/allMine/tree/builds"
+    override var name = "MyLiveTV"
     override val hasQuickSearch = true
     override val hasDownloadSupport = false
     override val supportedTypes = setOf(TvType.Live, TvType.TvSeries)
     private val jsonCatalogUrl = "https://kwqbwdmmwwpufkownclf.supabase.co/storage/v1/object/public/Main/myCategories.json"
     override var lang = "en"
     // Enable this when your provider has a main page
-    override val hasMainPage = true
+    override val hasMainPage = false
     override val mainPage = mainPageOf("" to "Live IPTV Channels")
 
     // Memory cache for the parsed categories

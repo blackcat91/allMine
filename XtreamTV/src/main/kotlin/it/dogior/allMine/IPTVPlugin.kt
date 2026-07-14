@@ -36,6 +36,7 @@ class IPTVPlugin : Plugin() {
             }
             MainActivity.afterPluginsLoadedEvent.invoke(true)
         } catch (e: Exception) {
+            registerMainAPI(MyLiveTVProvider())
         }
     }
 }
