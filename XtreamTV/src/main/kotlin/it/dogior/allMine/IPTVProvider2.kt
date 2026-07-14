@@ -29,6 +29,8 @@ val sslContext = SSLContext.getInstance("SSL").apply {
 val clientOk = OkHttpClient.Builder()
     .connectTimeout(30, TimeUnit.SECONDS)
     .readTimeout(30, TimeUnit.SECONDS)
+    .followRedirects(false) // Stop it from automatically resolving
+    .followSslRedirects(false)
     // CRITICAL: Attach the relaxed SSL socket configurations here
     .sslSocketFactory(sslContext.socketFactory, trustAllCerts[0] as X509TrustManager)
     .hostnameVerifier { _, _ -> true } // Accepts the domain verification handshake
@@ -182,7 +184,7 @@ class MyLiveTVProvider : MainAPI() {
             name = "Live TV (HLS)",
 
             url = resolvedTokenUrl,
-            type = ExtractorLinkType.M3U8
+            type = ExtractorLinkType.VIDEO
         ) {
             this.referer = "https://ck24.ws"
             this.quality = Qualities.Unknown.value
@@ -195,7 +197,6 @@ class MyLiveTVProvider : MainAPI() {
                 "Accept-Encoding" to "gzip, deflate, br",
                 "Cache-Control" to "no-cache",
                 "Pragma" to "no-cache",
-                "keep-alive" to "timeout=60, max=100"
             )
         }
 
