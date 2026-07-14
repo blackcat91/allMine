@@ -28,7 +28,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
     override var lang = "en"
     // Enable this when your provider has a main page
     override val hasMainPage = false
-    override val mainPage = mainPageOf("" to "Live IPTV Channels")
+    override val mainPage = mainPageOf("channels" to "Live IPTV Channels")
 
     // Memory cache for the parsed categories
 
@@ -37,7 +37,22 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
     @OptIn(InternalSerializationApi::class)
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse? {
 
+        if(request.name != "channels"){
+            val pages : HomePageResponse? = fetchWithOkHttp(clientOk, jsonCatalogUrl)  { categories ->
+                cachedCategories = categories
+                newHomePageResponse(categories.map { group ->
+                    val searchResponses = group.channels.map { channel ->
+                        // Use TvType.Live here
+                        newLiveSearchResponse(channel.name, channel.streamUrl, TvType.Live) {
+                            this.posterUrl = channel.streamIcon
+                        }
+                    }
+                    HomePageList(group.categoryName, searchResponses)
+                }, hasNext = false)
 
+            }
+            return pages
+        }
 
         // Map every JSON category entry to a dedicated horizontal shelf row
           val pages : HomePageResponse? = fetchWithOkHttp(clientOk, jsonCatalogUrl)  { categories ->
