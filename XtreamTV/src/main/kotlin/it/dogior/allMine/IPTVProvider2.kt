@@ -180,9 +180,11 @@ class MyLiveTVProvider : MainAPI() {
         val streamLink = newExtractorLink(
             source = this.name,
             name = "Live TV (HLS)",
+
             url = resolvedTokenUrl,
             type = ExtractorLinkType.M3U8
         ) {
+            this.referer = "https://ck24.ws"
             this.quality = Qualities.Unknown.value
             this.headers = mapOf(
                 "Accept" to "*/*",
