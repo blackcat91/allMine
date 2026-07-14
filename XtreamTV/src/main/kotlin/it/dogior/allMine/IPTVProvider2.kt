@@ -108,7 +108,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
     override suspend fun load(url: String): LoadResponse {
 
 
-
+        var channelName : String? = ""
         // Fetch current EPG track data matching this stream if available
         val currentEpgText = try {
 
@@ -119,7 +119,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
               val flatChannels = it.flatMap { it.channels }
               val matchingChannel = flatChannels.find { it.streamUrl == url }
               val epgMatch = matchingChannel?.epg
-
+              channelName = matchingChannel?.name
               if (epgMatch != null) {
                   // Get current system time in absolute milliseconds
                   val nowMs = System.currentTimeMillis()
@@ -176,7 +176,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
         println("This IS THE URL!!!!  $url")
 
         return newLiveStreamLoadResponse(
-            name = "Live Feed",
+            name = channelName ?: "Live Feed",
             url = url,
             dataUrl = url
         ) {
@@ -218,7 +218,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
         val streamLink = newExtractorLink(
             source = this.name,
             name = "Live TV (HLS)",
-            url = formattedUrlForVlc,
+            url = resolvedTokenUrl,
             type = ExtractorLinkType.M3U8 // Forces VLC to skip raw file extension validation
         ) {
             this.quality = Qualities.Unknown.value
