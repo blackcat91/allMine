@@ -15,7 +15,15 @@ import java.util.concurrent.TimeUnit
 val clientOk = OkHttpClient.Builder()
     .connectTimeout(30, TimeUnit.SECONDS)
     .readTimeout(30, TimeUnit.SECONDS)
-    .build()
+    .addInterceptor { chain ->
+        val originalRequest: Request = chain.request()
+            val newRequest = originalRequest.newBuilder()
+                .addHeader("User-Agent" , "Player (Linux; Android 14)")
+                .build()
+         chain.proceed(newRequest)
+    }
+        .build()
+
 
 
 class MyLiveTVProvider : MainAPI() { // All providers must be an instance of MainAPI
@@ -29,7 +37,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
     // Enable this when your provider has a main page
     override val hasMainPage = false
     override val mainPage = mainPageOf("channels" to "Live IPTV Channels")
-
+    private val headers = mapOf("User-Agent" to "Player (Linux; Android 14)")
     // Memory cache for the parsed categories
 
 
@@ -47,7 +55,7 @@ class MyLiveTVProvider : MainAPI() { // All providers must be an instance of Mai
                             this.posterUrl = channel.streamIcon
                         }
                     }
-                    HomePageList(group.categoryName, searchResponses)
+                    HomePageList(group.categoryName, searchResponses, isHorizontalImages = true)
                 }, hasNext = false)
 
             }
